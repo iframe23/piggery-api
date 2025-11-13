@@ -1,0 +1,80 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Application Cache and Logs
+application/cache/*
+!application/cache/index.html
+application/logs/*
+!application/logs/index.html
+
+# Keep .htaccess files
+!application/*/.htaccess
+
+# Composer
+composer.lock
+composer.phar
+/vendor/
+
+# CodeIgniter User Guide (if exists)
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+
+# Environment Configuration Files
+.env
+application/config/database.php
+application/config/config.php
+
+# Uploaded Files (keep directory structure but ignore actual uploads)
+images/birth_certs/*
+!images/birth_certs/.gitkeep
+images/certifications/*
+!images/certifications/.gitkeep
+images/filenames/*
+!images/filenames/.gitkeep
+images/form_138s/*
+!images/form_138s/.gitkeep
+images/good_morals/*
+!images/good_morals/.gitkeep
+images/pig_pics/*
+!images/pig_pics/.gitkeep
+images/profile_pics/*
+!images/profile_pics/.gitkeep
+images/transferred_TORs/*
+!images/transferred_TORs/.gitkeep
+images/valid_ids/*
+!images/valid_ids/.gitkeep
+
+# Development and Preparation Files
+CLEANUP.md
+
+# IDE Files
+/nbproject/
+.idea/*
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# IDE Cache Files
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# Test Files
+/tests/tests/
+/tests/results/
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*~
+
+# OS Generated Files
+.DS_Store?
+ehthumbs.db
+Icon?
