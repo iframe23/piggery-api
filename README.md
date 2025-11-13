@@ -1,24 +1,35 @@
-# Piggery REST API
+# Piggery Management REST API
 
-A comprehensive REST API for piggery management built with CodeIgniter 3.x. Provides endpoints for managing livestock operations, scheduling, accounting, and educational curriculum with JWT authentication.
+A comprehensive REST API for piggery farm management built with CodeIgniter 3.x. Designed specifically for managing pig farms, livestock operations, breeding programs, feeding schedules, and farm business operations with JWT authentication.
 
 ## 🐷 Features
 
-### Core Management Modules
-- **🏫 School Management**: Educational curriculum and scheduling system
-- **📊 Dashboard**: Real-time analytics and overview
-- **💰 Accounting**: Financial tracking and reporting
-- **👤 User Management**: Role-based access control with JWT authentication
-- **📅 Scheduling**: Event and activity scheduling
-- **📋 Curriculum**: Educational content management
-- **📄 Reports**: Printable reports and documentation
+### Core Piggery Management Modules
+- **🐖 Pig Management**: Individual pig tracking, health records, and breeding history
+- **🏭 Farm Operations**: Facility management, pen assignments, and equipment tracking
+- **📊 Dashboard**: Real-time farm analytics, production metrics, and health monitoring
+- **💰 Farm Accounting**: Financial tracking, feed costs, sales records, and profitability analysis
+- **👤 User Management**: Role-based access control for farm workers and managers with JWT authentication
+- **📅 Scheduling**: Feeding schedules, breeding programs, vaccination reminders, and farm activities
+- **🍽️ Feed Management**: Feed inventory, nutrition tracking, and feeding schedules
+- **📄 Reports**: Production reports, health certificates, and breeding documentation
 
 ### API Features
-- RESTful API endpoints
-- JWT token-based authentication
-- File upload handling (certificates, IDs, pig photos, etc.)
-- Cross-platform compatibility
-- Comprehensive data validation
+- RESTful API endpoints for all farm operations
+- JWT token-based authentication for secure access
+- File upload handling (pig photos, health certificates, breeding records, etc.)
+- Cross-platform compatibility for mobile and web applications
+- Comprehensive data validation for livestock data integrity
+
+### File Management
+The system handles various farm documentation:
+- Pig identification photos
+- Health and vaccination certificates
+- Breeding records and genealogy
+- Feed quality certificates
+- Facility inspection documents
+- Sales and transfer records
+- Insurance and compliance documentation
 
 ## 🚀 Quick Start
 
@@ -38,8 +49,9 @@ A comprehensive REST API for piggery management built with CodeIgniter 3.x. Prov
 
 2. **Set up the database**
    ```sql
-   -- Import the database schema
-   mysql -u your_username -p your_database_name < schema.sql
+   -- Create database and import the schema
+   CREATE DATABASE piggery;
+   mysql -u your_username -p piggery < schema.sql
    ```
 
 3. **Configure the application**
@@ -77,19 +89,19 @@ A comprehensive REST API for piggery management built with CodeIgniter 3.x. Prov
    ```
 
 6. **Access the application**
-   Navigate to `http://yourdomain.com/` in your browser.
+   Navigate to `http://yourdomain.com/` in your browser to access the piggery management system.
 
 ## 📚 API Documentation
 
 ### Authentication Endpoints
 
-#### Login
+#### Farm User Login
 ```http
 POST /auth/login
 Content-Type: application/json
 
 {
-    "username": "your_username",
+    "username": "farm_manager",
     "password": "your_password"
 }
 ```
@@ -101,8 +113,8 @@ Response:
     "token": "jwt_token_here",
     "user_data": {
         "id": 1,
-        "username": "admin",
-        "role": "administrator"
+        "username": "farm_manager",
+        "role": "manager"
     }
 }
 ```
@@ -111,23 +123,59 @@ Response:
 
 | Endpoint | Method | Description | Authentication |
 |----------|--------|-------------|----------------|
-| `/auth/login` | POST | User authentication | No |
-| `/user/*` | GET/POST/PUT/DELETE | User management | JWT |
-| `/dashboard/*` | GET | Dashboard data | JWT |
-| `/accounting/*` | GET/POST | Financial operations | JWT |
-| `/curriculum/*` | GET/POST/PUT | Educational content | JWT |
-| `/schedule/*` | GET/POST/PUT/DELETE | Event scheduling | JWT |
-| `/school/*` | GET/POST | School operations | JWT |
+| `/auth/login` | POST | Farm user authentication | No |
+| `/user/*` | GET/POST/PUT/DELETE | Farm staff management | JWT |
+| `/dashboard/*` | GET | Farm dashboard data & analytics | JWT |
+| `/accounting/*` | GET/POST | Farm financial operations | JWT |
+| `/pig/*` | GET/POST/PUT/DELETE | Individual pig management | JWT |
+| `/schedule/*` | GET/POST/PUT/DELETE | Farm activity scheduling | JWT |
+| `/feed/*` | GET/POST/PUT | Feed inventory & management | JWT |
 
 ### File Upload Endpoints
 
-Upload files to various categories:
+Upload farm-related files:
 ```http
-POST /upload/profile_pic
 POST /upload/pig_photo
-POST /upload/certificate
+POST /upload/health_certificate
+POST /upload/breeding_record
 Content-Type: multipart/form-data
 Authorization: Bearer {jwt_token}
+```
+
+### Pig Management Endpoints
+
+**Get all pigs:**
+```http
+GET /pig/list
+Authorization: Bearer {jwt_token}
+```
+
+**Add new pig:**
+```http
+POST /pig/create
+Content-Type: application/json
+Authorization: Bearer {jwt_token}
+
+{
+    "pig_id": "PIG001",
+    "breed_id": 1,
+    "birth_date": "2023-05-15",
+    "pen_number": "A-12",
+    "status": "healthy"
+}
+```
+
+**Update pig information:**
+```http
+PUT /pig/update/{pig_id}
+Content-Type: application/json
+Authorization: Bearer {jwt_token}
+
+{
+    "weight": 85.5,
+    "health_status": "healthy",
+    "last_checkup": "2023-11-10"
+}
 ```
 
 ## 🔧 Configuration
@@ -162,16 +210,19 @@ Update `application/libraries/ImplementJWT.php` for JWT settings:
 ## 🗂 Project Structure
 
 ```
-piggeryRest/
+piggery-api/
 ├── application/
 │   ├── config/         # Configuration files
-│   ├── controllers/    # API controllers
-│   ├── models/         # Data models
+│   ├── controllers/    # API controllers (Pig, Feed, Schedule, etc.)
+│   ├── models/         # Data models (Pig_model, Feed_model, etc.)
 │   ├── libraries/      # Custom libraries (JWT, REST, PDF)
-│   └── views/          # View templates
-├── images/             # File uploads (organized by type)
+│   └── views/          # View templates for reports
+├── images/             # Farm file uploads (organized by type)
+│   ├── pig_pics/       # Individual pig photos
+│   ├── certifications/ # Health and breeding certificates
+│   └── ...            # Other farm documentation
 ├── system/             # CodeIgniter core
-├── schema.sql          # Database structure
+├── schema.sql          # Database structure for piggery
 └── README.md           # This file
 ```
 
@@ -180,22 +231,27 @@ piggeryRest/
 1. **API Testing**
    Use tools like Postman or curl to test endpoints:
    ```bash
-   curl -X POST http://localhost/piggery/auth/login \
+   # Test farm manager login
+   curl -X POST http://localhost/piggery-api/auth/login \
         -H "Content-Type: application/json" \
-        -d '{"username":"admin","password":"password"}'
+        -d '{"username":"farm_manager","password":"password"}'
+   
+   # Get pig list (requires JWT token)
+   curl -X GET http://localhost/piggery-api/pig/list \
+        -H "Authorization: Bearer YOUR_JWT_TOKEN"
    ```
 
 2. **Database Testing**
-   Verify database connections and queries work correctly.
+   Verify database connections and pig data queries work correctly.
 
 ## 🛡 Security Considerations
 
-- **Authentication**: JWT tokens for API access
-- **Authorization**: Role-based access control
-- **Input Validation**: All inputs are sanitized
-- **File Upload Security**: Type and size restrictions
-- **SQL Injection Prevention**: Using CodeIgniter's Query Builder
-- **XSS Protection**: Output escaping enabled
+- **Authentication**: JWT tokens for secure farm API access
+- **Authorization**: Role-based access control (farm managers, workers, veterinarians)
+- **Data Protection**: All pig and farm data inputs are sanitized
+- **File Upload Security**: Restricted file types for farm documentation
+- **SQL Injection Prevention**: Using CodeIgniter's Query Builder for database operations
+- **Farm Data Privacy**: XSS protection enabled for sensitive livestock information
 
 ## 🤝 Contributing
 
@@ -207,12 +263,14 @@ piggeryRest/
 
 ## 📋 TODO
 
-- [ ] Add API rate limiting
-- [ ] Implement real-time notifications
-- [ ] Add data export/import features
-- [ ] Mobile app integration
-- [ ] Advanced reporting dashboard
-- [ ] Multi-language support
+- [ ] Add pig health monitoring alerts
+- [ ] Implement breeding program automation
+- [ ] Add feed consumption analytics
+- [ ] Mobile app integration for farm workers
+- [ ] Advanced pig growth tracking dashboard
+- [ ] Integration with veterinary systems
+- [ ] Automated feeding schedule optimization
+- [ ] Market price integration for sales planning
 
 ## 📝 License
 
@@ -227,15 +285,18 @@ For support and questions:
 
 ## 📊 Database Schema
 
-The system uses the following main database tables:
-- `users` - User accounts and authentication
-- `breeds` - Pig breed information
-- `schedules` - Event and activity scheduling
-- `accounting` - Financial records
-- `curriculum` - Educational content
+The system uses the following main database tables for piggery management:
+- `pigs` - Individual pig records, health status, and tracking
+- `breeds` - Pig breed information and characteristics
+- `pens` - Farm facility and pen management
+- `feeds` - Feed inventory and nutrition data
+- `schedules` - Feeding schedules, breeding programs, and farm activities
+- `health_records` - Vaccination records, medical treatments, and health monitoring
+- `accounting` - Farm financial records, feed costs, and sales data
+- `users` - Farm staff accounts and access control
 
-See `schema.sql` for complete database structure.
+See `schema.sql` for complete database structure designed for pig farm operations.
 
 ---
 
-**Note**: This is a livestock management system designed for educational and farm management purposes. Ensure compliance with local regulations regarding animal management and data privacy.
+**Note**: This is a comprehensive pig farm management system designed specifically for piggery operations. The API handles all aspects of pig farming including livestock tracking, breeding programs, feed management, health monitoring, and farm business operations. Ensure compliance with local agricultural regulations and animal welfare standards.
